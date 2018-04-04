@@ -120,7 +120,6 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        //if(!intent.hasExtra("bitmap_extra")) {
             if (intent.hasExtra(getString(R.string.intent_tag_extra))) {
                 type_query = getResources().getString(R.string.trailers_param);
 
@@ -166,10 +165,6 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                 });
                 getAdditionalMovieInfo();
             }
-      // }
-        // else{
-       //
-       // }
     }
 
     private void insertOrDeleteMovie(){
@@ -204,7 +199,6 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                     values.put(CollectionContract.CollectionEntry.COLUMN_SAVED_MOVIE_IMAGE,imageByteForStorage);
                     getContentResolver().insert(CollectionContract.CollectionEntry.CONTENT_URI, values);
                 }
-                //getContentResolver().insert(CollectionContract.CollectionEntry.CONTENT_URI, values);
                 markAsFavoriteButton.setText(getString(R.string.remove_favorite));
 
             } else {

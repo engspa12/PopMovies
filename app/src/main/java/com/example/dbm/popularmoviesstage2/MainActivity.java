@@ -151,10 +151,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
     @Override
     public void onGridItemClick(int clickedItemIndex) {
         Intent intent = new Intent(MainActivity.this,DetailActivity.class);
-   //     if(!isOnline()) {
-   //         Bitmap bitmapMovie = listOfMovies.get(clickedItemIndex).getMovieBitmap();
-   //         intent.putExtra("bitmap_extra", bitmapMovie);
-   //     }
         Parcelable movie = listOfMovies.get(clickedItemIndex);
         intent.putExtra(getString(R.string.intent_tag_extra),movie);
         startActivity(intent);

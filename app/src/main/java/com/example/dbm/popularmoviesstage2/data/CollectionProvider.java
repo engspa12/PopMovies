@@ -15,8 +15,6 @@ import java.util.ArrayList;
 
 public class CollectionProvider extends ContentProvider {
 
-    //private boolean previousDeletion = false;
-
     private static final int MOVIES = 100;
     private static final int MOVIE_ID = 101;
 
@@ -135,12 +133,6 @@ public class CollectionProvider extends ContentProvider {
 
         getContext().getContentResolver().notifyChange(uri,null);
 
-        //if(previousDeletion) {
-            //rearrangeIdColumn(CollectionContract.CollectionEntry.CONTENT_URI);
-        //}
-
-        //You need to check if the newRowId variable has the correct Id after you execute the rearrangeIdColumn method,
-        // maybe it's not affecting the flow of the program but we need to be sure
         return ContentUris.withAppendedId(uri, newRowId);
     }
 
@@ -154,14 +146,11 @@ public class CollectionProvider extends ContentProvider {
             case MOVIES:
                 rowsDeleted = database.delete(CollectionContract.CollectionEntry.TABLE_NAME, selection, selectionArgs);
                 database.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + CollectionContract.CollectionEntry.TABLE_NAME + "'");
-                //previousDeletion = false;
                 break;
             case MOVIE_ID:
                 selection = CollectionContract.CollectionEntry.COLUMN_MOVIE_ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 rowsDeleted = database.delete(CollectionContract.CollectionEntry.TABLE_NAME, selection, selectionArgs);
-                //previousDeletion = true;
-                //rearrangeIdColumn(CollectionContract.CollectionEntry.CONTENT_URI);
                 break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
@@ -213,33 +202,4 @@ public class CollectionProvider extends ContentProvider {
         return rowsUpdated;
     }
 
-    public void rearrangeIdColumn(Uri uri){
-
-        String[] projection = {CollectionContract.CollectionEntry._ID};
-        Cursor cursor = query(uri,projection,null,null,null);
-        ArrayList<String> helperList = new ArrayList<>();
-
-        int count=0;
-        if(cursor.moveToFirst()){
-            String currentId = cursor.getString(cursor.getColumnIndexOrThrow(CollectionContract.CollectionEntry._ID));
-            helperList.add(currentId);
-            while(cursor.moveToNext()){
-                count++;
-                currentId = cursor.getString(cursor.getColumnIndexOrThrow(CollectionContract.CollectionEntry._ID));
-                helperList.add(currentId);
-            }
-            count++;
-
-            cursor.close();
-
-            for(int i=1;i<=count;i++){
-                Uri arrangeUri = ContentUris.withAppendedId(uri,Long.parseLong(helperList.get(i-1)));
-                ContentValues values = new ContentValues();
-                values.put(CollectionContract.CollectionEntry._ID,i);
-                update(arrangeUri,values,null,null);
-            }
-
-        }
-
-    }
 }
