@@ -25,6 +25,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     public interface ClickListener{
         void onItemClick(int clickedItemIndex);
+        void onItemClickShare(int clickedItemIndex);
     }
 
 
@@ -65,15 +66,28 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
         ImageView trailerImageView;
         TextView trailerTextView;
+        ImageView shareImageView;
 
         private TrailerViewHolder(View itemView){
             super(itemView);
             trailerImageView = (ImageView) itemView.findViewById(R.id.iv_trailer);
             trailerTextView = (TextView) itemView.findViewById(R.id.tv_trailer);
+            shareImageView = (ImageView) itemView.findViewById(R.id.iv_share);
         }
 
         public void bind(int listIndex){
+            shareImageView.setVisibility(View.INVISIBLE);
             trailerImageView.setOnClickListener(this);
+            if(listIndex == 0) {
+                shareImageView.setVisibility(View.VISIBLE);
+                shareImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int clickedPosition = getAdapterPosition();
+                        mOnClickListener.onItemClickShare(clickedPosition);
+                    }
+                });
+            }
             trailerTextView.setText(mContext.getString(R.string.trailer_item,String.valueOf(listIndex + 1)));
         }
 

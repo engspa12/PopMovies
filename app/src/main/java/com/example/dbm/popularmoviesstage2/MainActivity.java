@@ -1,18 +1,14 @@
 package com.example.dbm.popularmoviesstage2;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Movie;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -21,21 +17,18 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.dbm.popularmoviesstage2.data.CollectionContract;
 
@@ -46,7 +39,6 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.GridItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -326,8 +318,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
     public void getMovieDataFromCursor(Cursor data,  boolean isConnected ){
         listOfMovies.clear();
         data.moveToFirst();
-        Log.v(LOG,"Value of data: " + data.getPosition());
-        Log.v(LOG,"Value of data: " + data.getCount());
         int movie_id = data.getInt(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_ID));
         String movie_name = data.getString(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_NAME));
         String movie_release_date = data.getString(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_RELEASE_DATE));

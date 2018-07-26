@@ -3,25 +3,14 @@ package com.example.dbm.popularmoviesstage2;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.drm.DrmStore;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Movie;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.app.NavUtils;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -55,7 +43,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class DetailActivity extends AppCompatActivity implements TrailersAdapter.ClickListener {
 
@@ -364,6 +351,19 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     @Override
     public void onItemClick(int clickedItemIndex) {
         viewTrailer(YOUTUBE_URL + listOfTrailers.get(clickedItemIndex).getTrailerKey());
+    }
+
+    @Override
+    public void onItemClickShare(int clickedItemIndex) {
+        String mimeType = "text/plain";
+        String title = "Share Content";
+        String textToShare = YOUTUBE_URL + listOfTrailers.get(clickedItemIndex).getTrailerKey();
+
+        ShareCompat.IntentBuilder.from(this)
+                .setChooserTitle(title)
+                .setType(mimeType)
+                .setText(textToShare)
+                .startChooser();
     }
 
 }

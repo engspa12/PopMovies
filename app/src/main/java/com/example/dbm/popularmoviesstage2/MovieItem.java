@@ -1,11 +1,8 @@
 package com.example.dbm.popularmoviesstage2;
 
 import android.graphics.Bitmap;
-import android.graphics.Movie;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.util.ArrayList;
 
 /**
  * Created by DBM on 3/22/2018.
