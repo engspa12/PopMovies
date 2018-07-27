@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
 
     private static final String API_KEY = BuildConfig.API_KEY;
 
+
     private static final String LANGUAGE = "en-US";
 
     private static final String API_KEY_PARAM = "api_key";
