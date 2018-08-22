@@ -9,7 +9,7 @@
     <string name="popularity_sort">popular</string>
     <string name="highest_rate_sort">top_rated</string>
     <string name="sort_type">sort_type</string>
-    <string name="error_get_data">There was an error while getting the posters.</string>
+    <string name="error_get_data">There was an error while getting the data.</string>
     <string name="intent_tag_extra">movie_extra</string>
     <string name="JSON_root">results</string>
     <string name="movie_id">id</string>
