@@ -1,4 +1,4 @@
-package com.example.dbm.popularmoviesstage2;
+package com.example.dbm.popularmoviesstage2.classes;
 
 public class Trailer {
 

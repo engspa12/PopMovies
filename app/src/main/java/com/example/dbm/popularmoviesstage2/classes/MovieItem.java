@@ -1,4 +1,4 @@
-package com.example.dbm.popularmoviesstage2;
+package com.example.dbm.popularmoviesstage2.classes;
 
 import android.graphics.Bitmap;
 import android.os.Parcel;

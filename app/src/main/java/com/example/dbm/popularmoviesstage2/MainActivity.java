@@ -30,6 +30,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.dbm.popularmoviesstage2.adapters.MoviesAdapter;
+import com.example.dbm.popularmoviesstage2.classes.MovieItem;
 import com.example.dbm.popularmoviesstage2.data.CollectionContract;
 
 import org.json.JSONArray;

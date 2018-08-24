@@ -32,6 +32,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
+import com.example.dbm.popularmoviesstage2.adapters.ReviewsAdapter;
+import com.example.dbm.popularmoviesstage2.adapters.TrailersAdapter;
+import com.example.dbm.popularmoviesstage2.classes.MovieItem;
+import com.example.dbm.popularmoviesstage2.classes.Review;
+import com.example.dbm.popularmoviesstage2.classes.Trailer;
 import com.example.dbm.popularmoviesstage2.data.CollectionContract;
 
 import org.json.JSONArray;
@@ -285,14 +290,19 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                             } else {
                                 int totalReviewItems = response.getInt(getString(R.string.query_total_results));
                                 if(!(totalReviewItems == 0)) {
-                                    for (int i = 0; i < totalReviewItems; i++) {
-                                        JSONObject movie = results.getJSONObject(i);
-                                        String author = movie.getString(getString(R.string.author_of_review));
-                                        String content = movie.getString(getString(R.string.content_of_review));
-                                        listOfReviews.add(new Review(author, content));
+                                    try {
+                                        for (int i = 0; i < totalReviewItems; i++) {
+                                            JSONObject movie = results.getJSONObject(i);
+                                            String author = movie.getString(getString(R.string.author_of_review));
+                                            String content = movie.getString(getString(R.string.content_of_review));
+                                            listOfReviews.add(new Review(author, content));
+                                        }
+                                        reviewsAdapter = new ReviewsAdapter(listOfReviews.size(), listOfReviews, DetailActivity.this);
+                                        recyclerViewReviews.setAdapter(reviewsAdapter);
+                                    } catch(JSONException e){
+                                        reviewsAdapter = new ReviewsAdapter(listOfReviews.size(), listOfReviews, DetailActivity.this);
+                                        recyclerViewReviews.setAdapter(reviewsAdapter);
                                     }
-                                    reviewsAdapter = new ReviewsAdapter(listOfReviews.size(), listOfReviews,DetailActivity.this);
-                                    recyclerViewReviews.setAdapter(reviewsAdapter);
                                 } else{
                                     recyclerViewReviews.setVisibility(View.GONE);
                                     emptyTextViewReviews.setVisibility(View.VISIBLE);

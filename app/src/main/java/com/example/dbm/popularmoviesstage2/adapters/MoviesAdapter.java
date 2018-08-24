@@ -1,4 +1,4 @@
-package com.example.dbm.popularmoviesstage2;
+package com.example.dbm.popularmoviesstage2.adapters;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.dbm.popularmoviesstage2.R;
+import com.example.dbm.popularmoviesstage2.classes.MovieItem;
 
 import java.util.List;
 
