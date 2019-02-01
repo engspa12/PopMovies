@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
     private boolean alreadyLoaded;
     private int previousCount;
 
+    private String sourceType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
         page = 1;
         previousCount=0;
         alreadyLoaded = false;
+
+        sourceType = "database";
 
     }
 
@@ -153,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
         Intent intent = new Intent(MainActivity.this,DetailActivity.class);
         Parcelable movie = listOfMovies.get(clickedItemIndex);
         intent.putExtra(getString(R.string.intent_tag_extra),movie);
+        intent.putExtra("source_type",sourceType);
         startActivity(intent);
     }
 
@@ -187,13 +192,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
                                 String releaseDate = movie.getString(getString(R.string.movie_release_date));
                                 String posterPath = movie.getString(getString(R.string.movie_poster_path));
 
-                                listOfMovies.add(new MovieItem(id,title,synopsis,rating,releaseDate,BASE_POSTER_URL + posterPath));
+                                listOfMovies.add(new MovieItem(id,title,synopsis,rating,releaseDate,BASE_POSTER_URL + posterPath,null));
                             }
                             if(page==5) {
                                 mAdapter = new MoviesAdapter(NUM_TOTAL, MainActivity.this, listOfMovies,MainActivity.this);
                                 mMoviesGrid.setAdapter(mAdapter);
                                 mMoviesGrid.setVisibility(View.VISIBLE);
                                 emptyTextView.setVisibility(View.GONE);
+                                sourceType = "api";
                                 page=1;
                             } else{
                                 page++;
@@ -359,23 +365,18 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
             movie_poster_path = data.getString(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_POSTER_PATH));
             movie_synopsis = data.getString(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_SYNOPSIS));
 
-            if(!isOnline()) {
-               byte[] image = data.getBlob(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_SAVED_MOVIE_IMAGE));
-                Bitmap imageBitmap = getImage(image);
-                listOfMovies.add(new MovieItem(movie_id, movie_name, movie_synopsis, movie_rating, movie_release_date, movie_poster_path, imageBitmap));
-            } else {
-                listOfMovies.add(new MovieItem(movie_id, movie_name, movie_synopsis, movie_rating, movie_release_date, movie_poster_path));
-            }
+            byte[] imageHelpResource = data.getBlob(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_SAVED_MOVIE_IMAGE));
+            listOfMovies.add(new MovieItem(movie_id, movie_name, movie_synopsis, movie_rating, movie_release_date, movie_poster_path, imageHelpResource));
+
         }
+
+        sourceType = "database";
         mAdapter = new MoviesAdapter(listOfMovies.size(), MainActivity.this, listOfMovies,MainActivity.this);
         mMoviesGrid.setAdapter(mAdapter);
         emptyTextView.setVisibility(View.GONE);
         mMoviesGrid.setVisibility(View.VISIBLE);
     }
 
-    // convert from byte[] array to Bitmap
-    public static Bitmap getImage(byte[] image) {
-        return BitmapFactory.decodeByteArray(image, 0, image.length);
-    }
+
 }
 

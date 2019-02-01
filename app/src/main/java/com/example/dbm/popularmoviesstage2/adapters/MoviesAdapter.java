@@ -1,6 +1,8 @@
 package com.example.dbm.popularmoviesstage2.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.widget.RecyclerView;
@@ -81,6 +83,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         }
 
         public void bind(int gridIndex){
+
             if(isOnline()) {
                 //Load poster from the network
                 if (!mMovieList.get(gridIndex).getMoviePosterPath().equals(BASE_POSTER_URL + "null")) {
@@ -92,10 +95,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                     gridItemMovieImageView.setImageResource(R.drawable.without_poster);
                 }
             }
-            else{
+            else {
                 //Load poster from the database
-               gridItemMovieImageView.setImageBitmap(mMovieList.get(gridIndex).getMovieBitmap());
+                byte[] image = mMovieList.get(gridIndex).getMovieImageReplacement();
+               gridItemMovieImageView.setImageBitmap(getImage(image));
            }
+
         }
 
         @Override
@@ -111,6 +116,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                 (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnected();
+    }
+
+    // convert from byte[] array to Bitmap
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
 }

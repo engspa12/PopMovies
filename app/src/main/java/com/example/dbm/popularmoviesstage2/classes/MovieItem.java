@@ -10,8 +10,7 @@ import android.os.Parcelable;
 
 public class MovieItem implements Parcelable{
 
-
-    private Bitmap mMovieBitmap;
+    private byte[] imageHelpResource;
     private int mMovieId;
     private String mMovieTitle;
     private String mMovieSynopsis;
@@ -19,23 +18,14 @@ public class MovieItem implements Parcelable{
     private String mMovieReleaseDate;
     private String mMoviePosterPath;
 
-    public MovieItem(int movieId, String movieTitle,String movieSynopsis, double movieRating, String movieReleaseDate, String moviePosterPath){
+    public MovieItem(int movieId, String movieTitle,String movieSynopsis, double movieRating, String movieReleaseDate, String moviePosterPath, byte[] imageReplacement){
         mMovieId = movieId;
         mMovieTitle = movieTitle;
         mMovieSynopsis = movieSynopsis;
         mMovieRating = movieRating;
         mMovieReleaseDate = movieReleaseDate;
         mMoviePosterPath = moviePosterPath;
-    }
-
-    public MovieItem(int movieId, String movieTitle,String movieSynopsis, double movieRating, String movieReleaseDate, String moviePosterPath, Bitmap bitmap){
-        mMovieId = movieId;
-        mMovieTitle = movieTitle;
-        mMovieSynopsis = movieSynopsis;
-        mMovieRating = movieRating;
-        mMovieReleaseDate = movieReleaseDate;
-        mMoviePosterPath = moviePosterPath;
-        mMovieBitmap = bitmap;
+        imageHelpResource = imageReplacement;
     }
 
     private MovieItem(Parcel in) {
@@ -45,6 +35,7 @@ public class MovieItem implements Parcelable{
         mMovieRating = in.readDouble();
         mMovieReleaseDate = in.readString();
         mMoviePosterPath = in.readString();
+        imageHelpResource = in.createByteArray();
     }
 
     @Override
@@ -60,6 +51,7 @@ public class MovieItem implements Parcelable{
         out.writeDouble(mMovieRating);
         out.writeString(mMovieReleaseDate);
         out.writeString(mMoviePosterPath);
+        out.writeByteArray(imageHelpResource);
     }
 
     public static final Parcelable.Creator<MovieItem> CREATOR = new Parcelable.Creator<MovieItem>() {
@@ -85,6 +77,6 @@ public class MovieItem implements Parcelable{
 
     public String getMoviePosterPath(){return mMoviePosterPath;}
 
-    public Bitmap getMovieBitmap(){return mMovieBitmap;}
+    public byte[] getMovieImageReplacement(){return imageHelpResource;}
 
 }

@@ -2,10 +2,13 @@ package com.example.dbm.popularmoviesstage2;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.ActionBar;
@@ -106,6 +109,9 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     private Cursor mCursor;
     private ContentValues values;
 
+    private TextView emptyTextView;
+
+    private String sourceType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +119,27 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
+
+        if (intent.hasExtra("source_type")) {
+            sourceType = intent.getStringExtra("source_type");
+        }
+
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        scrollView = (ScrollView) findViewById(R.id.scroll_view);
+        recyclerViewReviews = (RecyclerView) findViewById(R.id.recycler_view_reviews);
+        recyclerViewTrailers = (RecyclerView) findViewById(R.id.recycler_view_trailers);
+        emptyTextView = (TextView) findViewById(R.id.empty_text_view_detail);
+        markAsFavoriteButton = (Button) findViewById(R.id.mark_as_favorite_button);
+        emptyTextViewReviews = (TextView) findViewById(R.id.empty_text_view_reviews);
+
+        emptyTextView.setVisibility(View.GONE);
+
+        if(!isOnline() && sourceType.equals("api")){
+            emptyTextView.setVisibility(View.VISIBLE);
+            emptyTextView.setText(getString(R.string.error_no_internet));
+            progressBar.setVisibility(View.GONE);
+            scrollView.setVisibility(View.GONE);
+        } else{
             if (intent.hasExtra(getString(R.string.intent_tag_extra))) {
                 typeSearch = getResources().getString(R.string.trailers_param);
 
@@ -121,13 +148,9 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                 // Enable the Up button
                 ab.setDisplayHomeAsUpEnabled(true);
 
-                markAsFavoriteButton = (Button) findViewById(R.id.mark_as_favorite_button);
-
-                progressBar = (ProgressBar) findViewById(R.id.progress_bar);
                 progressBar.setVisibility(View.VISIBLE);
-
-                scrollView = (ScrollView) findViewById(R.id.scroll_view);
                 scrollView.setVisibility(View.GONE);
+                emptyTextView.setVisibility(View.GONE);
 
                 listOfReviews = new ArrayList<>();
 
@@ -135,10 +158,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 
                 mQueue = Volley.newRequestQueue(this);
 
-                emptyTextViewReviews = (TextView) findViewById(R.id.empty_text_view_reviews);
                 emptyTextViewReviews.setVisibility(View.GONE);
-                recyclerViewReviews = (RecyclerView) findViewById(R.id.recycler_view_reviews);
-                recyclerViewTrailers = (RecyclerView) findViewById(R.id.recycler_view_trailers);
 
                 //RecyclerView Reviews
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -165,6 +185,9 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                 });
                 getAdditionalMovieInfo(typeSearch);
             }
+        }
+
+
     }
 
     private void insertOrDeleteMovie(){
@@ -243,14 +266,22 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             mMovieSynopsis.setText(getString(R.string.unknown_plot_synopsis));
         }
 
-        if (!movie.getMoviePosterPath().equals(BASE_POSTER_URL + "null")) {
+        //Load poster from network or database
+        if(isOnline()){
+            //There is a poster
+            if (!movie.getMoviePosterPath().equals(BASE_POSTER_URL + "null")) {
 
-            Glide.with(this)
-                    .load(movie.getMoviePosterPath())
-                    .placeholder(R.drawable.placeholder)
-                    .into(mMoviePoster);
-        } else {
-            mMoviePoster.setImageResource(R.drawable.without_poster);
+                Glide.with(this)
+                        .load(movie.getMoviePosterPath())
+                        .placeholder(R.drawable.placeholder)
+                        .into(mMoviePoster);
+            } else {
+                //The movie does not have a poster
+                mMoviePoster.setImageResource(R.drawable.without_poster);
+            }
+        } else{
+            byte[] image = movie.getMovieImageReplacement();
+            mMoviePoster.setImageBitmap(getImage(image));
         }
 
         if(mCursor.getCount() == 0){
@@ -264,7 +295,9 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     @Override
     protected void onStop() {
         super.onStop();
-        mCursor.close();
+        if(mCursor != null){
+            mCursor.close();
+        }
     }
 
 
@@ -406,6 +439,19 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                 .setType(mimeType)
                 .setText(textToShare)
                 .startChooser();
+    }
+
+    //Check Internet Connectivity
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
+    }
+
+    // convert from byte[] array to Bitmap
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
 }
