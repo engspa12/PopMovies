@@ -30,9 +30,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
         Context context = parent.getContext();
         int layoutIdForListItem = R.layout.review_item;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
 
-        View view = inflater.inflate(layoutIdForListItem,parent,shouldAttachToParentImmediately);
+        View view = inflater.inflate(layoutIdForListItem,parent,false);
 
         ReviewViewHolder viewHolder = new ReviewViewHolder(view);
 

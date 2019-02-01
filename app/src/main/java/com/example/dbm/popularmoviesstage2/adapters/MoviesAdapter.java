@@ -50,9 +50,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         Context context = parent.getContext();
         int layoutIdForGridItem = R.layout.movie_item;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
 
-        View view = inflater.inflate(layoutIdForGridItem,parent,shouldAttachToParentImmediately);
+        View view = inflater.inflate(layoutIdForGridItem,parent,false);
 
         MovieViewHolder viewHolder = new MovieViewHolder(view);
 
@@ -83,6 +82,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         public void bind(int gridIndex){
             if(isOnline()) {
+                //Load poster from the network
                 if (!mMovieList.get(gridIndex).getMoviePosterPath().equals(BASE_POSTER_URL + "null")) {
                     Glide.with(gridItemMovieImageView.getContext())
                             .load(mMovieList.get(gridIndex).getMoviePosterPath())
@@ -93,6 +93,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                 }
             }
             else{
+                //Load poster from the database
                gridItemMovieImageView.setImageBitmap(mMovieList.get(gridIndex).getMovieBitmap());
            }
         }
@@ -104,6 +105,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         }
     }
 
+    //Check Internet Connectivity
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -39,9 +39,8 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         Context context = parent.getContext();
         int layoutIdForListItem = R.layout.trailer_item;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
 
-        View view = inflater.inflate(layoutIdForListItem,parent,shouldAttachToParentImmediately);
+        View view = inflater.inflate(layoutIdForListItem,parent,false);
 
         TrailerViewHolder viewHolder = new TrailerViewHolder(view);
 
