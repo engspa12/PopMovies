@@ -36,7 +36,7 @@
     <string name="type_adapter_param">type_adapter</string>
     <string name="type_adapter_value_api">api_connection</string>
     <string name="type_adapter_value_loader">loader_sync</string>
-    <string name="no_favorites_message">"There are no movie in your favorites collection yet"</string>
+    <string name="no_favorites_message">"There are no movies in your favorites collection yet"</string>
     <string name="play_trailer_button">Play 1st Trailer</string>
     <string name="share_button">Share Trailer URL</string>
 </resources>
