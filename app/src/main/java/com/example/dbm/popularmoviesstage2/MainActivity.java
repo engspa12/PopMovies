@@ -47,19 +47,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
 
     private static final String LOG = MainActivity.class.getSimpleName();
 
-    private String[] projection = {CollectionContract.CollectionEntry.COLUMN_MOVIE_ID, CollectionContract.CollectionEntry.COLUMN_MOVIE_NAME,
-            CollectionContract.CollectionEntry.COLUMN_MOVIE_RELEASE_DATE, CollectionContract.CollectionEntry.COLUMN_MOVIE_RATING,
-            CollectionContract.CollectionEntry.COLUMN_MOVIE_POSTER_PATH,CollectionContract.CollectionEntry.COLUMN_MOVIE_SYNOPSIS};
-
     public static final String TAG = "MyTag";
 
-    private static final String BASE_URL =
-            "https://api.themoviedb.org/3/movie/";
+    private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
 
     private static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/w500";
 
     private static final String API_KEY = BuildConfig.API_KEY;
-
 
     private static final String LANGUAGE = "en-US";
 
@@ -80,7 +74,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
     private RequestQueue mRequestQueue;
 
     private String sortValue;
-    private String typeAdapter;
+
+    //To differentiate between an Api call and a Loader operation
+    private String requestType;
 
     private static final int LOADER_ID = 1;
 
@@ -100,19 +96,25 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
         mMoviesGrid = (RecyclerView) findViewById(R.id.recycler_view_movies);
 
         gridLayoutManager = new GridLayoutManager(this,2);
+
         mMoviesGrid.setLayoutManager(gridLayoutManager);
         mMoviesGrid.setHasFixedSize(true);
         mMoviesGrid.setAdapter(null);
+
         sortValue = getString(R.string.popularity_sort);
-        typeAdapter = getString(R.string.type_adapter_value_api);
+        requestType = getString(R.string.type_adapter_value_api);
+
         listOfMovies = new ArrayList<>();
+
         mRequestQueue = Volley.newRequestQueue(this);
+
         page = 1;
         previousCount=0;
         alreadyLoaded = false;
 
     }
 
+    //Check Internet Connectivity
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -124,18 +126,21 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
     protected void onResume() {
         super.onResume();
         if(isOnline()){
-            if(typeAdapter.equals(getString(R.string.type_adapter_value_api))) {
+            if(requestType.equals(getString(R.string.type_adapter_value_api))) {
+                //First time the app is launched
                 if(!alreadyLoaded) {
                     startArrangement(sortValue);
                     alreadyLoaded = true;
                 }
             }
-            else if(typeAdapter.equals(getString(R.string.type_adapter_value_loader))){
+            else if(requestType.equals(getString(R.string.type_adapter_value_loader))){
                 getSupportLoaderManager().initLoader(LOADER_ID, null, this);
             }
-        } else if(!(isOnline()) && typeAdapter.equals(getString(R.string.type_adapter_value_loader))){
+            //There is no Internet connection and the favorites screen is requested
+        } else if(!(isOnline()) && requestType.equals(getString(R.string.type_adapter_value_loader))){
                 getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-        } else{
+        } else {
+            //Api calls without Internet connection
             emptyTextView.setVisibility(View.VISIBLE);
             mMoviesGrid.setVisibility(View.GONE);
             emptyTextView.setText(getString(R.string.error_no_internet));
@@ -151,7 +156,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
         startActivity(intent);
     }
 
-    public void getDataFromHttpUrlUsingJSON(String url){
+
+    /**
+     * This method is used to make the an API request using the
+     * library Volley.
+     * @param url The url used to request data from API.
+     */
+    public void getDataFromHttpUrl(String url){
 
         if(page == 1) {
             listOfMovies.clear();
@@ -206,7 +217,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
         mRequestQueue.add(jsonObjectRequest);
     }
 
-    public URL buildUrl(String sortBy,int page){
+
+    /**
+     * This method builds an URL object which uses two parameters.
+     * @param sortBy This param specifies the sort type.
+     * @param page The page of the response.
+     * @return URL This returns an URL object formed from the sorting type and the page number.
+     */
+    public URL buildUrl(String sortBy, int page){
         Uri movieQueryUri = Uri.parse(BASE_URL + sortBy).buildUpon()
                 .appendQueryParameter(API_KEY_PARAM,API_KEY )
                 .appendQueryParameter(LANGUAGE_PARAM, LANGUAGE)
@@ -223,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
 
     public void startArrangement(String sort){
             URL url = buildUrl(sort, page);
-            getDataFromHttpUrlUsingJSON(url.toString());
+            getDataFromHttpUrl(url.toString());
     }
 
     @Override
@@ -237,8 +255,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
         int itemId = item.getItemId();
         switch(itemId){
             case R.id.popular_movies:
+                //Get popular movies
                 previousCount = 0;
-                typeAdapter = getString(R.string.type_adapter_value_api);
+                requestType = getString(R.string.type_adapter_value_api);
                 if(isOnline()) {
                     sortValue = getString(R.string.popularity_sort);
                     startArrangement(sortValue);
@@ -249,8 +268,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
                 }
                 return true;
             case R.id.highest_rated_movies:
+                //Get highest rated movies
                 previousCount = 0;
-                typeAdapter = getString(R.string.type_adapter_value_api);
+                requestType = getString(R.string.type_adapter_value_api);
                 if(isOnline()) {
                     sortValue = getString(R.string.highest_rate_sort);
                     startArrangement(sortValue);
@@ -261,7 +281,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
                 }
                 return true;
             case R.id.favorites_movies:
-                typeAdapter = getString(R.string.type_adapter_value_loader);
+                //Get favorites from database using a Content Provider
+                requestType = getString(R.string.type_adapter_value_loader);
                 getSupportLoaderManager().initLoader(LOADER_ID, null, this);
                 return true;
         }
@@ -271,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(getString(R.string.sort_type), sortValue);
-        outState.putString(getString(R.string.type_adapter_param),typeAdapter);
+        outState.putString(getString(R.string.type_adapter_param), requestType);
         super.onSaveInstanceState(outState);
     }
 
@@ -279,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         sortValue = savedInstanceState.getString(getString(R.string.sort_type));
-        typeAdapter = savedInstanceState.getString(getString(R.string.type_adapter_param));
+        requestType = savedInstanceState.getString(getString(R.string.type_adapter_param));
     }
 
     @NonNull
@@ -292,17 +313,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 
-        if (cursor.getCount() != 0 && cursor != null) {
+        if (cursor.getCount() != 0) {
                 if(cursor.getCount() != previousCount) {
-                    if (typeAdapter.equals(getString(R.string.type_adapter_value_loader))) {
-                        if (isOnline()) {
-                        getMovieDataFromCursor(cursor, true);
-                        } else {
-                        getMovieDataFromCursor(cursor, false);
-                        }
+                    if (requestType.equals(getString(R.string.type_adapter_value_loader))) {
+                        getMovieDataFromCursor(cursor);
                     }
                 }
-        } else if (typeAdapter.equals(getString(R.string.type_adapter_value_loader))) {
+        } else if (requestType.equals(getString(R.string.type_adapter_value_loader))) {
             listOfMovies.clear();
             emptyTextView.setVisibility(View.VISIBLE);
             mMoviesGrid.setVisibility(View.GONE);
@@ -318,23 +335,21 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
         mMoviesGrid.setAdapter(null);
     }
 
-    public void getMovieDataFromCursor(Cursor data,  boolean isConnected ){
-        listOfMovies.clear();
-        data.moveToFirst();
-        int movie_id = data.getInt(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_ID));
-        String movie_name = data.getString(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_NAME));
-        String movie_release_date = data.getString(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_RELEASE_DATE));
-        double movie_rating = data.getDouble(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_RATING));
-        String movie_poster_path = data.getString(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_POSTER_PATH));
-        String movie_synopsis = data.getString(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_SYNOPSIS));
+    /**
+     * This method works with the data returned from the Loader.
+     * @param data The returned cursor.
+     */
+    public void getMovieDataFromCursor(Cursor data){
 
-        if(!isConnected) {
-            byte[] image = data.getBlob(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_SAVED_MOVIE_IMAGE));
-            Bitmap imageBitmap = getImage(image);
-            listOfMovies.add(new MovieItem(movie_id, movie_name, movie_synopsis, movie_rating, movie_release_date, movie_poster_path, imageBitmap));
-        } else {
-            listOfMovies.add(new MovieItem(movie_id, movie_name, movie_synopsis, movie_rating, movie_release_date, movie_poster_path));
-        }
+        listOfMovies.clear();
+
+        int movie_id;
+        String movie_name;
+        String movie_release_date;
+        double movie_rating;
+        String movie_poster_path;
+        String movie_synopsis;
+
 
         while (data.moveToNext()) {
             movie_id = data.getInt(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_ID));
@@ -344,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
             movie_poster_path = data.getString(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_POSTER_PATH));
             movie_synopsis = data.getString(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_MOVIE_SYNOPSIS));
 
-            if(!isConnected) {
+            if(!isOnline()) {
                byte[] image = data.getBlob(data.getColumnIndex(CollectionContract.CollectionEntry.COLUMN_SAVED_MOVIE_IMAGE));
                 Bitmap imageBitmap = getImage(image);
                 listOfMovies.add(new MovieItem(movie_id, movie_name, movie_synopsis, movie_rating, movie_release_date, movie_poster_path, imageBitmap));
@@ -358,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
         mMoviesGrid.setVisibility(View.VISIBLE);
     }
 
-    // convert from byte array to bitmap
+    // convert from byte[] array to Bitmap
     public static Bitmap getImage(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }

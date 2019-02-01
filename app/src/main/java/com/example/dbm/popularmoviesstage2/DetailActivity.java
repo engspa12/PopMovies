@@ -101,7 +101,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     private RecyclerView recyclerViewTrailers;
     private TrailersAdapter trailersAdapter;
 
-    private String type_query;
+    private String typeSearch;
 
     private Cursor mCursor;
     private ContentValues values;
@@ -114,7 +114,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 
         Intent intent = getIntent();
             if (intent.hasExtra(getString(R.string.intent_tag_extra))) {
-                type_query = getResources().getString(R.string.trailers_param);
+                typeSearch = getResources().getString(R.string.trailers_param);
 
                 // Get a support ActionBar corresponding to this toolbar
                 ActionBar ab = getSupportActionBar();
@@ -122,24 +122,31 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                 ab.setDisplayHomeAsUpEnabled(true);
 
                 markAsFavoriteButton = (Button) findViewById(R.id.mark_as_favorite_button);
+
                 progressBar = (ProgressBar) findViewById(R.id.progress_bar);
                 progressBar.setVisibility(View.VISIBLE);
+
                 scrollView = (ScrollView) findViewById(R.id.scroll_view);
                 scrollView.setVisibility(View.GONE);
 
                 listOfReviews = new ArrayList<>();
+
                 listOfTrailers = new ArrayList<>();
+
                 mQueue = Volley.newRequestQueue(this);
+
                 emptyTextViewReviews = (TextView) findViewById(R.id.empty_text_view_reviews);
                 emptyTextViewReviews.setVisibility(View.GONE);
                 recyclerViewReviews = (RecyclerView) findViewById(R.id.recycler_view_reviews);
                 recyclerViewTrailers = (RecyclerView) findViewById(R.id.recycler_view_trailers);
 
+                //RecyclerView Reviews
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
                 recyclerViewReviews.setLayoutManager(linearLayoutManager);
                 recyclerViewReviews.setHasFixedSize(true);
                 recyclerViewReviews.setNestedScrollingEnabled(false);
 
+                //RecyclerView Trailers
                 LinearLayoutManager linearLayoutManagerTrailers = new LinearLayoutManager(this);
                 recyclerViewTrailers.setLayoutManager(linearLayoutManagerTrailers);
                 recyclerViewTrailers.setHasFixedSize(true);
@@ -152,17 +159,18 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                 markAsFavoriteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //INSERT MOVIE IN CONTENT PROVIDER
+                        //Insert or Delete Movie
                         insertOrDeleteMovie();
                     }
                 });
-                getAdditionalMovieInfo();
+                getAdditionalMovieInfo(typeSearch);
             }
     }
 
     private void insertOrDeleteMovie(){
-        //If cursor is null, insert movie
+
         if(wantedUri != null) {
+            //Insert new movie
             if (mCursor.getCount() == 0) {
 
                 values = new ContentValues();
@@ -195,12 +203,14 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                 markAsFavoriteButton.setText(getString(R.string.remove_favorite));
 
             } else {
+                //Delete already stored movie
                 getContentResolver().delete(wantedUri, null, null);
                 markAsFavoriteButton.setText(getString(R.string.mark_as_favorite_button_text));
            }
         }
     }
 
+    //Convert from Bitmap to byte[]
     public static byte[] getBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
@@ -208,6 +218,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     }
 
 
+    //Populate UI components
     private void populateDetailUI() {
 
         mMovieTitle = findViewById(R.id.movie_title_tv);
@@ -256,12 +267,24 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         mCursor.close();
     }
 
-    public void getAdditionalMovieInfo() {
-        URL url = buildUrl(type_query);
+
+    /**
+     * This method is called to obtain Reviews and Trailers
+     * from the API after the url has been built.
+     * @param endpoint This param specifies the employed endpoint.
+     */
+    public void getAdditionalMovieInfo(String endpoint) {
+        //Get Reviews and Trailers
+        URL url = buildUrl(endpoint);
         getDataFromHttpUrl(url.toString());
     }
 
 
+    /**
+     * This method is used to make the an API request using the
+     * library Volley.
+     * @param urlForRequest The url used to request data from the API.
+     */
     public void getDataFromHttpUrl(String urlForRequest) {
 
         if (mQueue != null) {
@@ -274,8 +297,8 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray results = response.getJSONArray(getString(R.string.JSON_root));
-
-                            if (type_query.equals(getString(R.string.trailers_param))) {
+                            //Get Trailers
+                            if (typeSearch.equals(getString(R.string.trailers_param))) {
                                 int totalTrailerItems = results.length();
                                 for (int i = 0; i < totalTrailerItems; i++) {
                                     JSONObject movie = results.getJSONObject(i);
@@ -284,10 +307,11 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                                 }
                                 trailersAdapter = new TrailersAdapter(listOfTrailers.size(),listOfTrailers,DetailActivity.this,DetailActivity.this);
                                 recyclerViewTrailers.setAdapter(trailersAdapter);
-                                type_query = getResources().getString(R.string.reviews_param);
-                                getAdditionalMovieInfo();
+                                typeSearch = getResources().getString(R.string.reviews_param);
+                                getAdditionalMovieInfo(typeSearch);
 
                             } else {
+                                //Get Reviews
                                 int totalReviewItems = response.getInt(getString(R.string.query_total_results));
                                 if(!(totalReviewItems == 0)) {
                                     try {
@@ -303,7 +327,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                                         reviewsAdapter = new ReviewsAdapter(listOfReviews.size(), listOfReviews, DetailActivity.this);
                                         recyclerViewReviews.setAdapter(reviewsAdapter);
                                     }
-                                } else{
+                                } else {
                                     recyclerViewReviews.setVisibility(View.GONE);
                                     emptyTextViewReviews.setVisibility(View.VISIBLE);
                                 }
@@ -328,6 +352,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         mQueue.add(jsonObjectRequest);
     }
 
+    //Watch the first trailer via YouTube
     public void viewTrailer(String trailerUrl){
         Uri urlVideo = Uri.parse(trailerUrl);
         Intent intent = new Intent(Intent.ACTION_VIEW,urlVideo);
@@ -336,8 +361,13 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         }
     }
 
-    public URL buildUrl(String type) {
-        Uri queryUri = Uri.parse(BASE_URL + movie.getMovieId() + "/" + type).buildUpon()
+    /**
+     * This method is used to build an URL object from an String input.
+     * @param endpointType This is the desired endpoint for the API call.
+     * @return URL This returns an URL object formed from the passed String.
+     */
+    public URL buildUrl(String endpointType) {
+        Uri queryUri = Uri.parse(BASE_URL + movie.getMovieId() + "/" + endpointType).buildUpon()
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .appendQueryParameter(LANGUAGE_PARAM, LANGUAGE)
                 .build();
@@ -366,6 +396,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 
     @Override
     public void onItemClickShare(int clickedItemIndex) {
+        //Share movie data using ShareCompat
         String mimeType = "text/plain";
         String title = "Share Content";
         String textToShare = YOUTUBE_URL + listOfTrailers.get(clickedItemIndex).getTrailerKey();
