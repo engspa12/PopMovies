@@ -170,34 +170,7 @@ public class CollectionProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
-        final int match = sUriMatcher.match(uri);
-        switch (match) {
-            case MOVIES:
-                return updateMovies(uri, contentValues, selection, selectionArgs);
-            default:
-                throw new IllegalArgumentException("Update is not supported for " + uri);
-        }
-    }
-
-    public int updateMovies(Uri uri, ContentValues values, String selection, String[] selectionArgs){
-        if (values.size() == 0) {
-            return 0;
-        }
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        int rowsUpdated = db.update(CollectionContract.CollectionEntry.TABLE_NAME, values, selection, selectionArgs);
-
-        if (rowsUpdated != 0){
-            Toast.makeText(getContext(),"Movie was updated successfully",Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(getContext(),"There was a problem during update",Toast.LENGTH_SHORT).show();
-        }
-
-        if (rowsUpdated != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
-        }
-        return rowsUpdated;
+        return 0;
     }
 
 }
