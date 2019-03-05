@@ -1,6 +1,6 @@
-# PopularMoviesStage2
+# PopMovies
 
-#### PopularMoviesStage2 is an Android app that showcases movies using two sort criteria: Most Popular Movies and Highest Rated Movies.
+#### PopMovies is an Android app that showcases movies using two sort criteria: Most Popular Movies and Highest Rated Movies.
 
 #### The app allows you to save movies as favorites, watch movie trailers, read movie synopsis and reviews. Additional information displayed includes the movie rating and the movie release date.
 
@@ -18,11 +18,11 @@ src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/
 
 ## Prerequisites
 
-#### PopularMoviesStage2 was developed using Android Studio IDE so you must install it in your computer before proceeding:
+#### PopMovies was developed using Android Studio IDE so you must install it in your computer before proceeding:
 
 ###### https://developer.android.com/studio/
 
-#### Additionally, this application requires a TheMovieDB API key. Therefore, in order to use PopularMoviesStage2, you will need the get your own API key from:
+#### Additionally, this application requires a TheMovieDB API key. Therefore, in order to use PopMovies, you will need the get your own API key from:
 
 ###### https://www.themoviedb.org/ (create an account and follow the instructions to generate a TheMovieDB API key)
 
@@ -38,8 +38,8 @@ API_KEY = Insert your TheMovieDB API key here using double quotes
 
 ## Compatibility
 
-#### Minimum Android SDK: PopularMoviesStage2 requires a minimum API level of 15.
-#### Compile Android SDK: PopularMoviesStage2 requires you to compile against API 27 or later.
+#### Minimum Android SDK: PopMovies requires a minimum API level of 15.
+#### Compile Android SDK: PopMovies requires you to compile against API 27 or later.
 
 ## Getting Help
 
