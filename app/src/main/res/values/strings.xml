@@ -1,5 +1,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">PopularMoviesStage2</string>
+    <string name="app_name">PopMovies</string>
     <string name="popular_movies_title">Sort by Most Popular Movies</string>
     <string name="highest_rated_movies_title">Sort by Highest Rated Movies</string>
     <string name="unknown_release_date">Unknown Release Date</string>
