@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.dbm.popularmoviesstage2.R;
-import com.example.dbm.popularmoviesstage2.classes.Review;
+import com.example.dbm.popularmoviesstage2.domain.Review;
 
 import java.util.List;
 

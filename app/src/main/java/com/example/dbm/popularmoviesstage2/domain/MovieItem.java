@@ -1,6 +1,5 @@
-package com.example.dbm.popularmoviesstage2.classes;
+package com.example.dbm.popularmoviesstage2.domain;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 

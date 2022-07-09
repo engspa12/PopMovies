@@ -1,4 +1,4 @@
-package com.example.dbm.popularmoviesstage2;
+package com.example.dbm.popularmoviesstage2.activities;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -35,11 +35,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
+import com.example.dbm.popularmoviesstage2.BuildConfig;
+import com.example.dbm.popularmoviesstage2.R;
 import com.example.dbm.popularmoviesstage2.adapters.ReviewsAdapter;
 import com.example.dbm.popularmoviesstage2.adapters.TrailersAdapter;
-import com.example.dbm.popularmoviesstage2.classes.MovieItem;
-import com.example.dbm.popularmoviesstage2.classes.Review;
-import com.example.dbm.popularmoviesstage2.classes.Trailer;
+import com.example.dbm.popularmoviesstage2.domain.MovieItem;
+import com.example.dbm.popularmoviesstage2.domain.Review;
+import com.example.dbm.popularmoviesstage2.domain.Trailer;
 import com.example.dbm.popularmoviesstage2.data.CollectionContract;
 
 import org.json.JSONArray;

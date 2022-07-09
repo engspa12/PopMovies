@@ -1,4 +1,4 @@
-package com.example.dbm.popularmoviesstage2;
+package com.example.dbm.popularmoviesstage2.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,8 +28,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.dbm.popularmoviesstage2.BuildConfig;
+import com.example.dbm.popularmoviesstage2.R;
 import com.example.dbm.popularmoviesstage2.adapters.MoviesAdapter;
-import com.example.dbm.popularmoviesstage2.classes.MovieItem;
+import com.example.dbm.popularmoviesstage2.domain.MovieItem;
 import com.example.dbm.popularmoviesstage2.data.CollectionContract;
 
 import org.json.JSONArray;

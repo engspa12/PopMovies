@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dbm.popularmoviesstage2.R;
-import com.example.dbm.popularmoviesstage2.classes.Trailer;
+import com.example.dbm.popularmoviesstage2.domain.Trailer;
 
 import java.util.List;
 

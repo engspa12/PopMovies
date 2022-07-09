@@ -13,7 +13,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.dbm.popularmoviesstage2.R;
-import com.example.dbm.popularmoviesstage2.classes.MovieItem;
+import com.example.dbm.popularmoviesstage2.domain.MovieItem;
 
 import java.util.List;
 
