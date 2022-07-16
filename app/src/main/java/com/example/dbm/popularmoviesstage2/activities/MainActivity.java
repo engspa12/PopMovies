@@ -1,5 +1,6 @@
 package com.example.dbm.popularmoviesstage2.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -232,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
      */
     public URL buildUrl(String sortBy, int page){
         Uri movieQueryUri = Uri.parse(BASE_URL + sortBy).buildUpon()
-                .appendQueryParameter(API_KEY_PARAM,API_KEY )
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .appendQueryParameter(LANGUAGE_PARAM, LANGUAGE)
                 .appendQueryParameter(PAGE_PARAM,String.valueOf(page))
                 .build();
@@ -345,6 +346,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Gri
      * This method works with the data returned from the Loader.
      * @param data The returned cursor.
      */
+    @SuppressLint("Range")
     public void getMovieDataFromCursor(Cursor data){
 
         listOfMovies.clear();

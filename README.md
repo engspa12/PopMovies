@@ -6,11 +6,11 @@
 
 </br>
 
-<img src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F1.png?alt=media&token=d7530930-c6ce-42f9-ab1d-5fc72edaed20" width="420" height="692" style="margin:4px"> <img/><img src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F2.png?alt=media&token=397376f2-8497-439a-a023-344d0adc8607" width="420" height="692" style="margin:4px">
-<img src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F3.png?alt=media&token=2435cbe7-382b-425c-bd94-5a3610d67f8f" width="420" height="692" style="margin:4px"> <img/><img
-src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F4.png?alt=media&token=af3c028d-f6e0-4fd1-b776-7f196a127fef" width="420" height="692" style="margin:4px">
-<img src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F5.png?alt=media&token=06675859-fbf0-4e45-8bc6-80660bfbb3e2" width="420" height="692" style="margin:4px"> <img/><img
-src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F6.png?alt=media&token=8fbfac15-2213-439a-bf1b-bbdd05693ef8" width="420" height="692" style="margin:4px">
+<img src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F1.png?alt=media&token=d7530930-c6ce-42f9-ab1d-5fc72edaed20" width="375" height="725"><img height="725" hspace="20"/><img src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F2.png?alt=media&token=397376f2-8497-439a-a023-344d0adc8607" width="375" height="725">
+<img width="770" vspace="20"/>
+<img src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F3.png?alt=media&token=2435cbe7-382b-425c-bd94-5a3610d67f8f" width="375" height="725"><img height="725" hspace="20"/><img src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F4.png?alt=media&token=af3c028d-f6e0-4fd1-b776-7f196a127fef" width="375" height="725">
+<img width="770" vspace="20"/>
+<img src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F5.png?alt=media&token=06675859-fbf0-4e45-8bc6-80660bfbb3e2" width="375" height="725"><img height="725" hspace="20"/><img src="https://firebasestorage.googleapis.com/v0/b/inventoryapp-c8633.appspot.com/o/PopularMoviesStage2%2F6.png?alt=media&token=8fbfac15-2213-439a-bf1b-bbdd05693ef8" width="375" height="725">
 
 ## Getting Started
 
@@ -38,14 +38,14 @@ API_KEY = Insert your TheMovieDB API key here using double quotes
 
 ## Compatibility
 
-#### Minimum Android SDK: PopMovies requires a minimum API level of 15.
-#### Compile Android SDK: PopMovies requires you to compile against API 27 or later.
+#### Minimum Android SDK: PopMovies requires a minimum API level of 21.
+#### Compile Android SDK: PopMovies requires you to compile against API 32 or later.
 
 ## Getting Help
 
 #### To report a specific problem or feature request, open a new issue on Github. For questions, suggestions, or anything else, email to:
 
-###### arturo_lpc@hotmail.com
+###### arturo.lpc12@gmail.com
 
 ## Author
 

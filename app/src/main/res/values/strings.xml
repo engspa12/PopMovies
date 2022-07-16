@@ -32,7 +32,7 @@
     <string name="reviews_param">reviews</string>
     <string name="review_written_by">Written by %1$s:</string>
     <string name="remove_favorite">Remove from favorites</string>
-    <string name="favorites_movies_title">Sort by Favorites Movies</string>
+    <string name="favorites_movies_title">Sort by Favorite Movies</string>
     <string name="type_adapter_param">type_adapter</string>
     <string name="type_adapter_value_api">api_connection</string>
     <string name="type_adapter_value_loader">loader_sync</string>

@@ -390,7 +390,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     //Watch the first trailer via YouTube
     public void viewTrailer(String trailerUrl){
         Uri urlVideo = Uri.parse(trailerUrl);
-        Intent intent = new Intent(Intent.ACTION_VIEW,urlVideo);
+        Intent intent = new Intent(Intent.ACTION_VIEW, urlVideo);
         if(intent.resolveActivity(getPackageManager()) != null){
             startActivity(intent);
         }
